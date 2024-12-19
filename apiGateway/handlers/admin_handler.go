@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	adminpb "github.com/faris-muhammed/e-protofiles/adminLogin"
+	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
 	"github.com/gin-gonic/gin"
 )
 

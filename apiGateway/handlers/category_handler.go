@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	sellerpb "github.com/faris-muhammed/e-protofiles/seller"
+	sellerpb "github.com/faris-muhammed/e-protofiles/category"
 	"github.com/gin-gonic/gin"
 )
 

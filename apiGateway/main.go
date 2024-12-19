@@ -5,8 +5,8 @@ import (
 
 	"github.com/faris-muhammed/e-commerce/apigateway/handlers"
 	"github.com/faris-muhammed/e-commerce/apigateway/routes"
-	adminpb "github.com/faris-muhammed/e-protofiles/adminLogin"
-	sellerpb "github.com/faris-muhammed/e-protofiles/seller"
+	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
+	sellerpb "github.com/faris-muhammed/e-protofiles/category"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 )
