@@ -8,7 +8,7 @@ import (
 	"github.com/faris-muhammed/e-commerce/admin-service/handlers"
 	"github.com/faris-muhammed/e-commerce/admin-service/repository"
 	"github.com/faris-muhammed/e-commerce/admin-service/service"
-	adminpb "github.com/faris-muhammed/e-protofiles/adminLogin"
+	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
 	"google.golang.org/grpc"
 )
 

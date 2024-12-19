@@ -3,9 +3,9 @@ module github.com/faris-muhammed/e-commerce/admin-service
 go 1.22.3
 
 require (
-	github.com/faris-muhammed/e-protofiles v0.0.0-20241218073233-38d57b54cafa
+	github.com/faris-muhammed/e-protofiles v0.0.0-20241219051255-f3c2fdd22d04
 	github.com/golang-jwt/jwt/v4 v4.5.1
-	google.golang.org/grpc v1.69.0
+	google.golang.org/grpc v1.69.2
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 )
@@ -23,5 +23,5 @@ require (
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241015192408-796eee8c2d53 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
+	google.golang.org/protobuf v1.36.0 // indirect
 )

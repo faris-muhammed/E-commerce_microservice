@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/faris-muhammed/e-commerce/admin-service/service"
-	adminpb "github.com/faris-muhammed/e-protofiles/adminLogin"
+	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
 )
 
 type AdminServiceHandler struct {
