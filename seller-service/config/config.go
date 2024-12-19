@@ -8,7 +8,7 @@ import (
 	"github.com/faris-muhammed/e-commerce/seller-service/models"
 	"github.com/faris-muhammed/e-commerce/seller-service/repository"
 	"github.com/faris-muhammed/e-commerce/seller-service/service"
-	sellerpb "github.com/faris-muhammed/e-protofiles/seller"
+	sellerpb "github.com/faris-muhammed/e-protofiles/category"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

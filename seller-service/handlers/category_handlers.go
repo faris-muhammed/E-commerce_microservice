@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/faris-muhammed/e-commerce/seller-service/service"
-	sellerpb "github.com/faris-muhammed/e-protofiles/seller"
+	sellerpb "github.com/faris-muhammed/e-protofiles/category"
 )
 
 type CategoryHandler struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/faris-muhammed/e-commerce/seller-service/models"
 	"github.com/faris-muhammed/e-commerce/seller-service/repository"
-	seller "github.com/faris-muhammed/e-protofiles/seller"
+	seller "github.com/faris-muhammed/e-protofiles/category"
 )
 
 type CategoryService interface {
