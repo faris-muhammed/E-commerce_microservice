@@ -11,13 +11,12 @@ import (
 // Claims struct for JWT claims
 type Claims struct {
 	Username string `json:"username"`
-	UserId   uint  
+	UserId   uint
 	Role     string `json:"role"`
 	jwt.StandardClaims
 }
 
 var jwtKey = []byte(os.Getenv("SECRETKEY"))
-
 
 // Middleware for checking JWT validity
 // func AuthMiddleware(requiredRole string) gin.HandlerFunc {
@@ -124,7 +123,7 @@ var jwtKey = []byte(os.Getenv("SECRETKEY"))
 
 func AuthMiddleware(requiredRole string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("jwtkey",jwtKey)
+		fmt.Println("jwtkey", jwtKey)
 		tokenString, err := c.Cookie("jwtToken" + requiredRole)
 		fmt.Println("TokenString", tokenString)
 		if err != nil {

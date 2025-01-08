@@ -65,7 +65,7 @@ func (h *CategoryHandler) EditCategoryHTTP(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	sellerReq := &sellerpb.EditCategoryRequest{
-		CategoryId:   int32(id),
+		CategoryId:   uint64(id),
 		Name: req.Name,
 		Description:  req.Description,
 	}
@@ -100,7 +100,7 @@ func (h *CategoryHandler) DeleteCategoryHTTP(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	sellerReq := &sellerpb.DeleteCategoryRequest{
-		CategoryId: int32(id),
+		CategoryId: uint64(id),
 	}
 	resp, err := h.sellerService.DeleteCategory(ctx, sellerReq)
 	if err != nil {

@@ -1,9 +1,12 @@
 module github.com/faris-muhammed/e-commerce/apigateway
 
-go 1.22.3
+go 1.23
+
+toolchain go1.23.4
 
 require (
-	github.com/faris-muhammed/e-protofiles v0.0.0-20241219051255-f3c2fdd22d04
+	github.com/faris-muhammed/e-protofiles v1.6.0
+	github.com/gin-contrib/sessions v1.0.1
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	google.golang.org/grpc v1.69.2
@@ -20,6 +23,9 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.20.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
+	github.com/gorilla/context v1.1.2 // indirect
+	github.com/gorilla/securecookie v1.1.2 // indirect
+	github.com/gorilla/sessions v1.4.0 //indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect

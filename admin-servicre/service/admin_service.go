@@ -1,56 +1,59 @@
 package service
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 	"time"
 
 	"github.com/faris-muhammed/e-commerce/admin-service/repository"
+	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
 	"github.com/golang-jwt/jwt/v4"
 )
 
-type UserService interface {
-	Login(email, password string) (string, error)
+type AdminServiceServer struct {
+	adminpb.UnimplementedAdminServiceServer
+	repo repository.AdminRepository
 }
 
-type userService struct {
-	repo repository.UserRepository
+
+func NewUserService(repo repository.AdminRepository) *AdminServiceServer {
+	return &AdminServiceServer{repo: repo}
 }
 
-func NewUserService(repo repository.UserRepository) UserService {
-	return &userService{repo: repo}
+var Role = "Admin"
+
+var jwtKey = []byte(os.Getenv("SECRETKEY"))
+
+func (s *AdminServiceServer) Login(ctx context.Context, req *adminpb.LoginRequest) (*adminpb.LoginResponse, error) {	
+    user, err := s.repo.FindUserByEmail(req.Username)
+    if err != nil {
+        return nil, errors.New("invalid email or password")
+    }
+
+    // Compare password securely (use bcrypt or another secure method here)
+    // if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+    //     return nil, errors.New("invalid email or password")
+    // }
+
+    // Generate JWT token
+    tokenString, err := generateJWT(uint(user.Id), user.Username, Role)
+    if err != nil {
+        return nil, err
+    }
+
+    fmt.Println("Generated JWT:", tokenString)
+    return &adminpb.LoginResponse{Message: "Login Successful", Token: tokenString}, nil
 }
 
-var Role ="Admin"
-var jwtKey = []byte(os.Getenv("SECRETKEY")) // Ensure you store this securely, ideally in an environment variable
-
-func (s *userService) Login(email, password string) (string, error) {
-	user, err := s.repo.FindUserByEmail(email)
-	if err != nil {
-		return "", errors.New("invalid email or password")
-	}
-
-	// Here, you'd compare the password hash with bcrypt or other secure hashing methods
-	// if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-	// 	 return "", errors.New("invalid email or password")
-	// }
-
-	// Generate JWT token with the user's role
-	tokenString, err := generateJWT(uint(user.Id), user.Username, Role)
-	if err != nil {
-		return "", err
-	}
-	fmt.Println("Generated JWT:", tokenString)
-	return tokenString, nil
-}
 
 // Generate JWT token with role
 func generateJWT(userId uint, username, role string) (string, error) {
 	claims := jwt.MapClaims{
 		"username": username,
 		"userId":   userId,
-		"role":     role, // Include the user's role
+		"role":     role,                                  // Include the user's role
 		"exp":      time.Now().Add(time.Hour * 24).Unix(), // Token expires in 24 hours
 	}
 

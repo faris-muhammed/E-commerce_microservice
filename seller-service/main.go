@@ -7,12 +7,12 @@ import (
 )
 
 func main() {
-	// Step 1: Initialize dependencies
-	handler, err := config.SetupDependencies()
+	// Initialize and set up dependencies for both Category and Seller services
+	categoryHandler, sellerHandler, productHandler, err := config.SetupDependencies()
 	if err != nil {
 		log.Fatalf("Failed to initialize dependencies: %v", err)
 	}
 
-	// Step 2: Start gRPC server
-	config.StartGRPCServer(handler)
+	// Start the gRPC server for both services on port 50051
+	config.StartGRPCServer(categoryHandler, sellerHandler, productHandler)
 }

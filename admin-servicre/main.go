@@ -5,7 +5,6 @@ import (
 	"net"
 
 	"github.com/faris-muhammed/e-commerce/admin-service/config"
-	"github.com/faris-muhammed/e-commerce/admin-service/handlers"
 	"github.com/faris-muhammed/e-commerce/admin-service/repository"
 	"github.com/faris-muhammed/e-commerce/admin-service/service"
 	adminpb "github.com/faris-muhammed/e-protofiles/adminlogin"
@@ -21,7 +20,7 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	adminService := service.NewUserService(userRepo)
-	adminHandler := handlers.NewAdminServiceHandler(adminService)
+
 	// Start gRPC server
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
@@ -29,7 +28,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	adminpb.RegisterAdminServiceServer(grpcServer, adminHandler)
+	adminpb.RegisterAdminServiceServer(grpcServer, adminService)
 
 	log.Println("gRPC Server is running on port 50051...")
 	if err := grpcServer.Serve(lis); err != nil {

@@ -3,7 +3,7 @@ module github.com/faris-muhammed/e-commerce/admin-service
 go 1.22.3
 
 require (
-	github.com/faris-muhammed/e-protofiles v0.0.0-20241219051255-f3c2fdd22d04
+	github.com/faris-muhammed/e-protofiles v1.3.0
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	google.golang.org/grpc v1.69.2
 	gorm.io/driver/postgres v1.5.11

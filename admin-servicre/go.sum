@@ -1,8 +1,10 @@
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/faris-muhammed/e-protofiles v0.0.0-20241219051255-f3c2fdd22d04 h1:TkxlgsxN2LUF14uUkH0hEtYG1LVFqSe3KJN4XMqeZWA=
-github.com/faris-muhammed/e-protofiles v0.0.0-20241219051255-f3c2fdd22d04/go.mod h1:WrOpO0APtTH53Jx6ks2/eTTg4q4h+BIAZTtmP8rlpr8=
+github.com/faris-muhammed/e-protofiles v0.0.0-20241221050046-ce51bb3569dc h1:dS2nTJi72si62U9LAsAU02cyj2/Qmkqc+2tubWkN1p4=
+github.com/faris-muhammed/e-protofiles v0.0.0-20241221050046-ce51bb3569dc/go.mod h1:WrOpO0APtTH53Jx6ks2/eTTg4q4h+BIAZTtmP8rlpr8=
+github.com/faris-muhammed/e-protofiles v1.3.0 h1:JPjvS+PQg/n+FpoSjuRb5D0X2iagqyPf1Qud+MuJIlM=
+github.com/faris-muhammed/e-protofiles v1.3.0/go.mod h1:WrOpO0APtTH53Jx6ks2/eTTg4q4h+BIAZTtmP8rlpr8=
 github.com/go-logr/logr v1.4.2 h1:6pFjapn8bFcIbiKo3XT4j/BhANplGihG6tvd+8rYgrY=
 github.com/go-logr/logr v1.4.2/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=

@@ -8,7 +8,9 @@ import (
 	"github.com/faris-muhammed/e-commerce/seller-service/models"
 	"github.com/faris-muhammed/e-commerce/seller-service/repository"
 	"github.com/faris-muhammed/e-commerce/seller-service/service"
-	sellerpb "github.com/faris-muhammed/e-protofiles/category"
+	categorypb "github.com/faris-muhammed/e-protofiles/category"
+	productpb "github.com/faris-muhammed/e-protofiles/product"
+	sellerpb "github.com/faris-muhammed/e-protofiles/sellerlogin"
 	"google.golang.org/grpc"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,6 +18,7 @@ import (
 
 var DB *gorm.DB
 
+// ConnectDatabase connects to the PostgreSQL database for both services
 func ConnectDatabase() (*gorm.DB, error) {
 	dsn := "host=localhost user=postgres password=501417 dbname=seller_service port=5432 sslmode=disable"
 	database, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -24,7 +27,8 @@ func ConnectDatabase() (*gorm.DB, error) {
 	}
 
 	DB = database
-	if err := DB.AutoMigrate(&models.Product{}, &models.Category{}); err != nil {
+	// Auto migrate models for both Category and Seller
+	if err := DB.AutoMigrate(&models.Category{}, &models.Seller{},models.Product{}); err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
 
@@ -32,34 +36,46 @@ func ConnectDatabase() (*gorm.DB, error) {
 	return DB, nil
 }
 
-// setupDependencies initializes all required dependencies.
-func SetupDependencies() (*handlers.CategoryHandler, error) {
-	// Step 1: Connect to the database
+// SetupDependencies initializes both the Category and Seller services
+func SetupDependencies() (categorypb.CategoryServiceServer, sellerpb.SellerServiceServer, productpb.ProductServiceServer, error) {
 	db, err := ConnectDatabase()
 	if err != nil {
-		return nil, err
+		return nil, nil, nil, err
 	}
 
-	categoryRepo := repository.NewSellerRepository(db)
+	// Initialize CategoryService
+	categoryRepo := repository.NewCategoryRepository(db)
 	categoryService := service.NewCategoryService(categoryRepo)
-	return handlers.NewCategoryHandler(categoryService), nil
 
+	// Initialize SellerService
+	userRepo := repository.NewUserRepository(db)
+	sellerService := service.NewUserService(userRepo)
+	sellerHandler := handlers.NewSellerServiceHandler(sellerService)
+
+	productRepo := repository.NewProductRepository(db)
+	productService := service.NewProductServiceServer(productRepo)
+
+	return categoryService, sellerHandler, productService, nil
 }
 
-func StartGRPCServer(handler sellerpb.CategoryServiceServer) {
-	// Step 1: Create gRPC server
+// StartGRPCServer starts a single gRPC server for both services
+func StartGRPCServer(categoryHandler categorypb.CategoryServiceServer, sellerHandler sellerpb.SellerServiceServer, productHandler productpb.ProductServiceServer) {
+	// Create a single gRPC server
 	grpcServer := grpc.NewServer()
-	sellerpb.RegisterCategoryServiceServer(grpcServer, handler)
 
-	// Step 2: Listen on port 50052
+	// Register both services on the same gRPC server
+	categorypb.RegisterCategoryServiceServer(grpcServer, categoryHandler)
+	sellerpb.RegisterSellerServiceServer(grpcServer, sellerHandler)
+	productpb.RegisterProductServiceServer(grpcServer, productHandler)
+	// Listen on port 50052
 	listener, err := net.Listen("tcp", ":50052")
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
 
-	log.Println("Seller service is running on port 50052...")
+	log.Println("Seller and Category service is running on port 50052...")
 
-	// Step 3: Serve gRPC server
+	// Start serving the gRPC server
 	if err := grpcServer.Serve(listener); err != nil {
 		log.Fatalf("Failed to serve gRPC server: %v", err)
 	}

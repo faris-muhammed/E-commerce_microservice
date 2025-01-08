@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository interface {
+type AdminRepository interface {
 	FindUserByEmail(username string) (*models.Admin, error)
 }
 
@@ -15,7 +15,7 @@ type userRepository struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) AdminRepository {
 	return &userRepository{db: db}
 }
 

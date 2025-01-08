@@ -10,15 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type LoginHandler struct {
+type AdminLoginHandler struct {
 	adminClient adminpb.AdminServiceClient
 }
 
-func NewLoginHandler(client adminpb.AdminServiceClient) *LoginHandler {
-	return &LoginHandler{adminClient: client}
+func NewLoginHandler(client adminpb.AdminServiceClient) *AdminLoginHandler {
+	return &AdminLoginHandler{adminClient: client}
 }
 
-func (h *LoginHandler) LoginHTTP(c *gin.Context) {
+func (h *AdminLoginHandler) LoginHTTP(c *gin.Context) {
 	var req struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -52,7 +52,7 @@ func (h *LoginHandler) LoginHTTP(c *gin.Context) {
 	})
 }
 
-func (h *LoginHandler) LogoutHTTP(c *gin.Context) {
+func (h *AdminLoginHandler) LogoutHTTP(c *gin.Context) {
 	c.SetCookie("jwtTokenAdmin", "", -1, "/", "", false, true)
 	c.JSON(200, gin.H{
 		"status":  "Success",

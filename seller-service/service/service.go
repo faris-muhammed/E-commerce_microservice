@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"errors"
 
 	"github.com/faris-muhammed/e-commerce/seller-service/models"
@@ -8,35 +9,30 @@ import (
 	seller "github.com/faris-muhammed/e-protofiles/category"
 )
 
-type CategoryService interface {
-	AddCategory(req *seller.AddCategoryRequest) (*seller.CategoryResponse, error)
-	EditCategory(req *seller.EditCategoryRequest) (*seller.CategoryResponse, error)
-	DeleteCategory(req *seller.DeleteCategoryRequest) (*seller.CategoryResponse, error)
-	GetCategories() (*seller.CategoryListResponse, error)
-}
-
 type categoryService struct {
+	seller.UnimplementedCategoryServiceServer // Embed the unimplemented server
 	repo repository.CategoryRepository
 }
 
 // NewCategoryService initializes a new CategoryService.
-func NewCategoryService(repo repository.CategoryRepository) CategoryService {
+func NewCategoryService(repo repository.CategoryRepository) seller.CategoryServiceServer {
 	return &categoryService{repo: repo}
 }
 
-func (s *categoryService) AddCategory(req *seller.AddCategoryRequest) (*seller.CategoryResponse, error) {
+func (s *categoryService) AddCategory(ctx context.Context, req *seller.AddCategoryRequest) (*seller.CategoryResponse, error) {
 	category := &models.Category{
 		Name:        req.Name,
 		Description: req.Description,
 	}
-	if err := s.repo.CreateCategory(category); err != nil {
+	_, err := s.repo.CreateCategory(category)
+	if err != nil {
 		return nil, err
 	}
 	return &seller.CategoryResponse{Message: "Category added successfully!"}, nil
 }
 
-func (s *categoryService) EditCategory(req *seller.EditCategoryRequest) (*seller.CategoryResponse, error) {
-	category, err := s.repo.FindCategoryByID(uint(req.CategoryId))
+func (s *categoryService) EditCategory(ctx context.Context, req *seller.EditCategoryRequest) (*seller.CategoryResponse, error) {
+	category, err := s.repo.GetCategoryByID(uint(req.CategoryId))
 	if err != nil {
 		return nil, errors.New("category not found")
 	}
@@ -51,27 +47,15 @@ func (s *categoryService) EditCategory(req *seller.EditCategoryRequest) (*seller
 	return &seller.CategoryResponse{Message: "Category updated successfully!"}, nil
 }
 
-//	func (s *categoryService) DeleteCategory(req *seller.DeleteCategoryRequest) (*seller.CategoryResponse, error) {
-//		if err := s.repo.DeleteCategory(uint(req.CategoryId)); err != nil {
-//			return nil, errors.New("category not found or deletion failed")
-//		}
-//		return &seller.CategoryResponse{Message: "Category deleted successfully!"}, nil
-//	}
-func (s *categoryService) DeleteCategory(req *seller.DeleteCategoryRequest) (*seller.CategoryResponse, error) {
-	// Check if the categoryId is non-negative
-	if req.CategoryId < 0 {
-		return nil, errors.New("invalid category ID: must be a non-negative integer")
-	}
-
-	// Call repository to delete the category
-	if err := s.repo.DeleteCategory(req.CategoryId); err != nil {
+func (s *categoryService) DeleteCategory(ctx context.Context, req *seller.DeleteCategoryRequest) (*seller.CategoryResponse, error) {
+	if err := s.repo.DeleteCategory(uint(req.CategoryId)); err != nil {
 		return nil, errors.New("category not found or deletion failed")
 	}
 
 	return &seller.CategoryResponse{Message: "Category deleted successfully!"}, nil
 }
 
-func (s *categoryService) GetCategories() (*seller.CategoryListResponse, error) {
+func (s *categoryService) GetCategories(ctx context.Context, req *seller.Empty) (*seller.CategoryListResponse, error) {
 	categories, err := s.repo.GetCategories()
 	if err != nil {
 		return nil, err
@@ -80,7 +64,7 @@ func (s *categoryService) GetCategories() (*seller.CategoryListResponse, error) 
 	var categoryList []*seller.Category
 	for _, c := range categories {
 		categoryList = append(categoryList, &seller.Category{
-			Id:          c.ID,
+			Id:          uint64(c.ID),
 			Name:        c.Name,
 			Description: c.Description,
 		})

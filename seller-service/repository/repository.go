@@ -6,43 +6,54 @@ import (
 )
 
 type CategoryRepository interface {
-	CreateCategory(category *models.Category) error
+	GetCategories() ([]*models.Category, error)
+	GetCategoryByID(id uint) (*models.Category, error)
+	CreateCategory(category *models.Category) (*models.Category, error)
+	DeleteCategory(id uint) error
 	UpdateCategory(category *models.Category) error
-	DeleteCategory(categoryID int32) error
-	GetCategories() ([]models.Category, error)
-	FindCategoryByID(id uint) (*models.Category, error)
 }
 
 type categoryRepository struct {
 	db *gorm.DB
 }
 
-func NewSellerRepository(db *gorm.DB) CategoryRepository {
+func NewCategoryRepository(db *gorm.DB) CategoryRepository {
 	return &categoryRepository{db: db}
 }
 
-func (r *categoryRepository) CreateCategory(category *models.Category) error {
-	return r.db.Create(category).Error
+func (r *categoryRepository) GetCategories() ([]*models.Category, error) {
+	var categories []*models.Category
+	if err := r.db.Find(&categories).Error; err != nil {
+		return nil, err
+	}
+	return categories, nil
 }
 
-func (r *categoryRepository) UpdateCategory(category *models.Category) error {
-	return r.db.Save(category).Error
-}
-
-func (r *categoryRepository) DeleteCategory(categoryID int32) error {
-	return r.db.Where("id = ?", categoryID).Delete(&models.Category{}).Error
-}
-
-func (r *categoryRepository) GetCategories() ([]models.Category, error) {
-	var categories []models.Category
-	err := r.db.Find(&categories).Error
-	return categories, err
-}
-
-func (r *categoryRepository) FindCategoryByID(id uint) (*models.Category, error) {
+func (r *categoryRepository) GetCategoryByID(id uint) (*models.Category, error) {
 	var category models.Category
 	if err := r.db.First(&category, id).Error; err != nil {
 		return nil, err
 	}
 	return &category, nil
+}
+
+func (r *categoryRepository) CreateCategory(category *models.Category) (*models.Category, error) {
+	if err := r.db.Create(&category).Error; err != nil {
+		return nil, err
+	}
+	return category, nil
+}
+
+func (r *categoryRepository) DeleteCategory(id uint) error {
+	if err := r.db.Delete(&models.Category{}, id).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *categoryRepository) UpdateCategory(category *models.Category) error {
+	if err := r.db.Save(&category).Error; err != nil {
+		return err
+	}
+	return nil
 }
